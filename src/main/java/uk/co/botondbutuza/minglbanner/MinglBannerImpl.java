@@ -19,8 +19,8 @@ import android.widget.TextView;
  */
 
 public class MinglBannerImpl extends FrameLayout implements MinglBanner {
-    private static final int ANIM_DURATION = 500;
-    private View left, right;
+    private static final int ANIM_DURATION = 400;
+    private View left, right, textContainer;
     private TextView text;
 
     private int textX, textY;
@@ -38,6 +38,7 @@ public class MinglBannerImpl extends FrameLayout implements MinglBanner {
         super(context, attrs, defStyleAttr);
 
         LayoutInflater.from(context).inflate(R.layout.mingl_banner, this);
+        textContainer = findViewById(R.id.text_container);
         text = (TextView) findViewById(R.id.text);
         right = findViewById(R.id.right);
         left = findViewById(R.id.left);
@@ -50,21 +51,27 @@ public class MinglBannerImpl extends FrameLayout implements MinglBanner {
         left.setTranslationX(-getWidth() / 2);
         right.setTranslationX(getWidth());
 
-        textX = text.getWidth() / 2;
-        textY = text.getHeight() / 2;
+        textX = textContainer.getWidth() / 2;
+        textY = textContainer.getHeight() / 2;
         textRadius = (float) Math.hypot(textX, textY);
     }
 
     @Override
-    public MinglBannerImpl withColour(@ColorInt int colour) {
+    public MinglBannerImpl withBackgroundColour(@ColorInt int colour) {
         left.setBackgroundColor(colour);
         right.setBackgroundColor(colour);
         return this;
     }
 
     @Override
-    public MinglBannerImpl withText(String text) {
-        this.text.setText(text);
+    public MinglBanner withTextColour(@ColorInt int colour) {
+        text.setTextColor(colour);
+        return this;
+    }
+
+    @Override
+    public MinglBannerImpl withText(String txt) {
+        text.setText(txt);
         return this;
     }
 
@@ -84,21 +91,21 @@ public class MinglBannerImpl extends FrameLayout implements MinglBanner {
 
 
     private void showText() {
-        Animator anim = ViewAnimationUtils.createCircularReveal(text, textX, textY, 0, textRadius);
+        Animator anim = ViewAnimationUtils.createCircularReveal(textContainer, textX, textY, 0, textRadius);
         anim.setDuration(ANIM_DURATION / 2);
 
-        text.setVisibility(VISIBLE);
+        textContainer.setVisibility(VISIBLE);
         anim.start();
     }
 
     private void dismissText() {
-        Animator anim = ViewAnimationUtils.createCircularReveal(text, textX, textY, textRadius, 0);
+        Animator anim = ViewAnimationUtils.createCircularReveal(textContainer, textX, textY, textRadius, 0);
         anim.setDuration(ANIM_DURATION / 2);
         anim.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
                 super.onAnimationEnd(animation);
-                text.setVisibility(View.INVISIBLE);
+                textContainer.setVisibility(View.INVISIBLE);
             }
         });
         anim.start();

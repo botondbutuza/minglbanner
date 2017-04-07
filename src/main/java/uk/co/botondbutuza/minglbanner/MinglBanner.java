@@ -8,7 +8,9 @@ import android.support.annotation.ColorInt;
 
 public interface MinglBanner {
 
-    MinglBanner withColour(@ColorInt int colour);
+    MinglBanner withBackgroundColour(@ColorInt int colour);
+
+    MinglBanner withTextColour(@ColorInt int colour);
 
     MinglBanner withText(String text);
 
