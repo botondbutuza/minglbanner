@@ -79,13 +79,6 @@ public class MinglBannerImpl extends FrameLayout implements MinglBanner {
                 showText();
             }
         }, ANIM_DURATION / 4 * 3);
-
-        text.getHandler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                dismiss();
-            }
-        }, 2000);
     }
 
     @Override
