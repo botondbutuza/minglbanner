@@ -1,6 +1,7 @@
 package uk.co.botondbutuza.minglbanner;
 
 import android.support.annotation.ColorInt;
+import android.view.View;
 
 /**
  * Created by brotond on 07/04/2017.
@@ -17,4 +18,12 @@ public interface MinglBanner {
     void show();
 
     void dismiss();
+
+    void info(String message, Action action);
+
+
+    interface Action extends View.OnClickListener {
+
+        String getText();
+    }
 }
