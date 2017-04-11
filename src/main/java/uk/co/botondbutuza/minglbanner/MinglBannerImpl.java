@@ -31,6 +31,7 @@ public class MinglBannerImpl extends FrameLayout implements MinglBanner {
     private View left, right, textContainer;
     private TextView text;
     private Button button;
+    private Action action;
 
     private int textX, textY;
     private float textRadius;
@@ -67,7 +68,7 @@ public class MinglBannerImpl extends FrameLayout implements MinglBanner {
     }
 
     @Override
-    public MinglBannerImpl withBackgroundColour(@ColorInt int colour) {
+    public MinglBanner withBackgroundColour(@ColorInt int colour) {
         left.setBackgroundColor(colour);
         right.setBackgroundColor(colour);
         return this;
@@ -80,8 +81,25 @@ public class MinglBannerImpl extends FrameLayout implements MinglBanner {
     }
 
     @Override
-    public MinglBannerImpl withText(String txt) {
+    public MinglBanner withText(String txt) {
         text.setText(txt);
+        return this;
+    }
+
+    @Override
+    public MinglBanner withOnClick(OnClickListener listener) {
+        setOnClickListener(listener);
+        return this;
+    }
+
+    @Override
+    public MinglBanner withAction(Action action) {
+        this.action = action;
+        button.setText(action.getText());
+        button.setOnClickListener(v -> {
+            dismiss();
+            action.onClick(v);
+        });
         return this;
     }
 
@@ -97,6 +115,9 @@ public class MinglBannerImpl extends FrameLayout implements MinglBanner {
     @Override
     public void dismiss() {
         handler.removeCallbacksAndMessages(null);
+        button.setOnClickListener(null);
+        setOnClickListener(null);
+        action = null;
 
         left.animate().translationX(-getWidth() / 2).setDuration(ANIM_DURATION).start();
         right.animate().translationX(getWidth()).setDuration(ANIM_DURATION).start();
@@ -105,15 +126,9 @@ public class MinglBannerImpl extends FrameLayout implements MinglBanner {
 
     @Override
     public void info(String message, Action action) {
+        if (action != null) withAction(action);
         withBackgroundColour(INFO_BG_COLOUR);
         withText(message);
-
-        button.setText(action.getText());
-        button.setOnClickListener(v -> {
-            dismiss();
-            action.onClick(v);
-        });
-
         show();
     }
 

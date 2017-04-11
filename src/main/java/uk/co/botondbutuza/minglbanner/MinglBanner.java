@@ -15,6 +15,10 @@ public interface MinglBanner {
 
     MinglBanner withText(String text);
 
+    MinglBanner withOnClick(View.OnClickListener listener);
+
+    MinglBanner withAction(Action action);
+
     void show();
 
     void dismiss();
