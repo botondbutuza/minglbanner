@@ -88,7 +88,10 @@ public class MinglBannerImpl extends FrameLayout implements MinglBanner {
 
     @Override
     public MinglBanner withOnClick(OnClickListener listener) {
-        setOnClickListener(listener);
+        setOnClickListener(v -> {
+            dismiss();
+            listener.onClick(v);
+        });
         return this;
     }
 
@@ -105,6 +108,11 @@ public class MinglBannerImpl extends FrameLayout implements MinglBanner {
 
     @Override
     public void show() {
+        if (action == null) {
+            button.setVisibility(INVISIBLE);
+        }
+
+        setVisibility(VISIBLE);
         left.animate().translationX(0).setDuration(ANIM_DURATION).start();
         right.animate().translationX(0).setDuration(ANIM_DURATION).start();
 
@@ -119,7 +127,7 @@ public class MinglBannerImpl extends FrameLayout implements MinglBanner {
         setOnClickListener(null);
         action = null;
 
-        left.animate().translationX(-getWidth() / 2).setDuration(ANIM_DURATION).start();
+        left.animate().translationX(-getWidth() / 2).setDuration(ANIM_DURATION).withEndAction(() -> setVisibility(GONE)).start();
         right.animate().translationX(getWidth()).setDuration(ANIM_DURATION).start();
         handler.postDelayed(this::dismissText, ANIM_DURATION / 3);
     }
